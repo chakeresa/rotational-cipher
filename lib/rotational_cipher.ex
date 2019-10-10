@@ -1,4 +1,7 @@
 defmodule RotationalCipher do
+  @lowercase_bounds [97, 122]
+  @uppercase_bounds [65, 90]
+
   @doc """
   Given a plaintext and amount to shift by, return a rotated string.
 
@@ -18,17 +21,22 @@ defmodule RotationalCipher do
   end
 
   @spec shift_char(char :: char, shift :: integer) :: char
-  def shift_char(char, shift) do
+  defp shift_char(char, shift) do
     cond do
-      char <= 122 && char >= 97 ->
+      within_bounds(char, @lowercase_bounds) ->
         char + shift - 97
         |> rem(26)
         |> Kernel.+(97)
-      char <= 90 && char >= 65 ->
+      within_bounds(char, @uppercase_bounds) ->
         char + shift - 65
         |> rem(26)
         |> Kernel.+(65)
       true -> char
     end
+  end
+
+  @spec within_bounds(number :: integer, list :: [integer]) :: boolean
+  defp within_bounds(number, list) do
+    number <= Enum.at(list, 1) && number >= Enum.at(list, 0)
   end
 end
